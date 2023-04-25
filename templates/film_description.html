@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="sidenav">
+    <!-- <h1>TV {{ film_type }}</h1>
+    <a href="#">Trending</a>
+    <a href="#">Popular</a>
+    <a href="#">Recommended</a>
+    <a href="#">Watched</a>
+    <a href="#">Collected</a>
+    <a href="#">Amtocipated</a> -->
+</div>
+<div class="main_part">
+    <div class="movie">
+        <div class="movie_card" id="bright">
+            <div class="info_selection">
+                <div class="movie_header">
+                    <img src="{{ data.posterUrl }}" alt="" class="movie_img">
+                    {% if data.nameRu %}
+                        {% set film_name = data.nameRu %}
+                    {% elif data.nameEn %}
+                        {% set film_name = data.nameEn %}
+                    {% endif %}
+                    <h1>{{ film_name }}</h1>
+                    <h4>{{ data.year }}</h4>
+                    <span class="minutes">{{ data.filmLength }}</span>
+                    <p class="country">{{ data.countries.country }}</p>
+                    {% for genre in data.genres %}
+                        <p class="type"> {{ genre }} </p>
+                    {% endfor %}       
+                </div>
+                <div class="movie_desc">
+                    <p class="text">{{ data.description }}</p>
+                </div>
+            </div>
+            <div class="blur_back"></div>
+        </div>
+    </div>
+</div>
+{% endblock %}

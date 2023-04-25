@@ -4,10 +4,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- стили сайта -->
-	<link rel="stylesheet" href="../css/styles.css" type="text/css">
+	<link rel="stylesheet" href="{{ url_for('static', filename='/css/styles.css') }}" type="text/css">
 
     <!-- Bootstrap Font Icon CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <!-- шрифт raleway-->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,51 +18,81 @@
     <link rel="shortcut icon" href="../static/img/icon_movie.ico">
 </head>
 <body>
-    <!-- ШАПКА -->
-    <header>
-        <div class="header_menu">
-            <div class="search">
-                <button class="icon"><img src="../static/img/search.svg" alt=""></button>
-                  <div class="input">
-                      <input type="text" placeholder="Search" id="mySearch">
-                  </div>
-			</div>
-
-            <div class="top_menu">
-                <ul>
-                    <li><a href="#">TV</a></li>
-                    <li><a href="#">Movies</a></li>
-                    <div class="logo">
-                        <img src="../static/img/icon_movie.svg">
+    <div class="wrapper">
+        <!-- ШАПКА -->
+        <header>
+            <div class="header_menu">
+                <div class="search">
+                    <button class="icon"><img src="{{ url_for('static', filename='img/search.svg') }}" alt=""></button>
+                    <form action="" method="POST">
+                        {{ search_form.hidden_tag() }}
+                        <div class="input">
+                            {{ search_form.search_query(type="text", placeholder="Поиск", class='squery') }}
+                            {{ search_form.search_btn(type="submit", class="search-btn") }}
+                        </div>
+                    </form>
+                </div>
+                <div class="top_menu">
+                    <ul>
+                        <li><a href="/shows/page1" {% if '/shows' in request.path %}class="active"{% endif %}>ТВ-шоу</a></li>
+                        <li><a href="/movies/page1" {% if '/movies' in request.path %}class="active"{% endif %}>Фильмы</a></li>
+                        <div class="logo">
+                            <img src="{{ url_for('static', filename='img/icon_movie.svg') }}">
+                        </div>
+                        <li><a href="/serieses/page1" {% if '/serieses' in request.path %}class="active"{% endif %}>Сериалы</a></li>
+                        <li><a href="#">Discover</a></li>
+                    </ul>
+                </div>
+                <!-- авторизация -->
+                {% if current_user.is_authenticated %}
+                    <div class="dropdown">
+                        <button class="navbar-user"><img src="" alt=""> {{ current_user.username }}</button>
+                        <div class="dropdown-content">
+                            <a href="/users/{{ current_user.username }}">Profile</a>
+                            <a href="/users/{{ current_user.id }}/history">History</a>
+                            <a href="/users/{{ current_user.id }}/ratings">Ratings</a>
+                            <a href="/users/{{ current_user.id }}/lists">Lists</a>
+                            <a href="/users/{{ current_user.id }}/comments">Comments</a>
+                            <a href="/users/{{ current_user.id }}/friends" class="link-friends">Friends</a>
+                            <a href="/users/{{ current_user.id }}/settings">Settings</a>
+                            <a href="/logout">Sign out</a>
+                        </div>
                     </div>
-                    <li><a href="#">New</a></li>
-                    <li><a href="#">Discover</a></li>
-                </ul>
+                {% else %}
+                    <div class="authorization">
+                        <a href="/auth/join"><button class="register">LOG IN</button></a>
+                        <a href="/auth/signin"><button class="sign-in">SIGN IN</button></a>
+                    </div>
+                {% endif %}
             </div>
-            <!-- авторизация -->
-            <div class="authorization">
-                <button class="register">LOG IN</button>
-                <button class="sign-in">SIGN IN</button>
+        </header>
+        <!-- ОСНОВНАЯ ЧАСТЬ -->
+        <main role="main" class="main">
+            {% block content %}{% endblock %}
+        </main>
+        <!-- МОДАЛЬНОЕ ОКНО -->
+        <div class="modal">
+            <div class="modal-window">
+                <h1>Ваши списки фильмов</h1>
+                <hr>
+                <div class="list-content"></div>
+                <button class="start-btn">Добавить</button>
+                <button class="btn-close-modal-win">X</button>
             </div>
-
+            <div class="overlay"></div>
         </div>
-    </header>
-    <!-- ОСНОВНАЯ ЧАСТЬ -->
-    <main role="main" class="container">
-        {% block content %}{% endblock %}
-    </main>
-    <!-- ПОДВАЛ -->
-    <footer>
-        <nav>
-            <a href="https://instagram.com/sprittzer?igshid=YmMyMTA2M2Y="><img class="instagram" src="../static/img/instagram.svg"></a>
-            <a href="https://t.me/sprittzer"><img class="telegram" src="../static/img/telegram.svg"></a>
-            <a href="https://github.com/sprittzer"><img class="github" src="../static/img/github.svg"></a>
-            <a href="https://ru.pinterest.com/sprittzerr/"><img class="pinterest" src="../static/img/pinterest.svg"></a>
-            <a href="https://vk.com/sprittzer"><img class="vk" src="../static/img/vk.svg"></a>
-
-        </nav>
-        <p>SPRITTZER 2023</p>
-    </footer>
+        <!-- ПОДВАЛ -->
+        <footer>
+            <nav>
+                <a href="https://instagram.com/sprittzer?igshid=YmMyMTA2M2Y="><img class="instagram" src="{{ url_for('static', filename='img/instagram.svg') }}"></a>
+                <a href="https://t.me/sprittzer"><img class="telegram" src="{{ url_for('static', filename='img/telegram.svg') }}"></a>
+                <a href="https://github.com/sprittzer"><img class="github" src="{{ url_for('static', filename='img/github.svg') }}"></a>
+                <a href="https://ru.pinterest.com/sprittzerr/"><img class="pinterest" src="{{ url_for('static', filename='img/pinterest.svg') }}"></a>
+                <a href="https://vk.com/sprittzer"><img class="vk" src="{{ url_for('static', filename='img/vk.svg') }}"></a>
+            </nav>
+            <p>SPRITTZER 2023</p>
+        </footer>
+    </div>
 </body>
-<script src="../js/scripts.js"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 </html>

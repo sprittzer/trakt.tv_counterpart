@@ -12,7 +12,7 @@ main{
     justify-content: center;
     align-items: center;
 }
-input{
+input:not(.button){
     font-size: 14px;
     line-height: 16px;
     height: 45px;
@@ -22,7 +22,7 @@ input{
     padding-left: 25px;
     color: #000000;
 }
-input:focus{
+input:not(.button):focus{
     border: 2px solid #1d1d1d68;
     outline: none;
 }
@@ -83,7 +83,6 @@ input:focus{
 .form-field a:hover{
     color: rgb(194, 22, 28);
 }
-
 .button{
     font-weight: bold;
     font-size: 14px;
@@ -155,5 +154,8 @@ input:focus{
     color: rgb(237, 28, 36);
 }
 .register-form-sign-in a:hover{
+    color: rgb(194, 22, 28);
+}
+.error{
     color: rgb(194, 22, 28);
 }

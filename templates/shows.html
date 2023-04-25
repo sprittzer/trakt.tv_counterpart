@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="sidenav">
+    <!-- <h1>TV {{ film_type }}</h1>
+    <a href="#">Trending</a>
+    <a href="#">Popular</a>
+    <a href="#">Recommended</a>
+    <a href="#">Watched</a>
+    <a href="#">Collected</a>
+    <a href="#">Amtocipated</a> -->
+</div>
+<div class="main_part">
+    <div class="movies">
+        {% for film in films %}
+            <div class="film-window">
+                <a href="/{{film.kinopoiskId}}" class="generic-movie-link">
+                    {% if film.ratingKinopoisk >= 8 %}
+                        <div class="rating rating--green">{{ film.ratingKinopoisk }}</div>
+                    {% elif film.ratingKinopoisk > 5 %}
+                        <div class="rating rating--orange">{{ film.ratingKinopoisk }}</div>
+                    {% else %}
+                        <div class="rating rating--red">{{ film.ratingKinopoisk }}</div>
+                    {% endif %}
+                    <div class="film-info">
+                        <div class="movie-cover" style="background-image: url('{{ film.posterUrl }}');"></div>
+                        <div class="place-for-name">
+                            {% if film.nameRu %}
+                                {% set film_name = film.nameRu %}
+                            {% elif film.nameEn %}
+                                {% set film_name = film.nameEn %}
+                            {% elif film.nameOriginal %}
+                                {% set film_name = film.nameOriginal %}
+                            {% endif %}
+                            <p title="{{ film_name }}" class="film-name">{{ film_name }}</p>
+                        </div>
+                    </div>
+                </a>
+                <div class="film-menu">
+                    <!-- add to watched history -->
+                    <button class="add-to-history" title="Добавить в историю просмотров" value="{{ film.kinopoiskId }}"><img src="../static/img/tick_purple.svg" alt=""></button> 
+                    <!-- add to list -->
+                    <button class="btn-adding-to-list" title="Добавить в список" value="{{ film.kinopoiskId }}"><img src="../static/img/lines_blue.svg" alt=""></button>
+                    <!-- recommended to -->
+                    <button class="btn-recommendation" title="Рекомендую этот фильм"  value="{{ film.kinopoiskId }}"><img src="../static/img/lightning_orange.svg" alt=""></button>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="page-control">
+        {% if resolution1 %}
+            <a href="/{{ film_type }}/page{{ page - 1 }}">&#10229; Предыдущая страница</a>
+        {% else %}
+            <a href="#" class="disabled previous-page">&#10229; Предыдущая страница</a>
+        {% endif %}
+        {% if resolution2 %}
+            <a href="/{{ film_type }}/page{{ page + 1 }}" class="next-page">Следующая страница &#10230;</a>
+        {% else %}
+            <a href="#" class="disabled next-page">Следующая страница &#10230;</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
